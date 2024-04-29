@@ -16,3 +16,6 @@ def get_name(soup: BeautifulSoup):
     return soup.select_one(
         "span.cmp-product-details-main__heading-title"
     ).get_text(strip=True)
+
+def get_description(soup: BeautifulSoup) -> str:
+    return soup.select_one("div.cmp-text").get_text(strip=True)

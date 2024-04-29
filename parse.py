@@ -14,6 +14,21 @@ def extract_nutrition_elements(elements: list) -> list:
     return extracted_elements
 
 
+def extract_components(components: list) -> list:
+    extracted_components = []
+
+    for component in components:
+
+        if component:
+            extracted_components.append(
+                remove_extra_spaces(component.get_text(strip=True))
+            )
+        else:
+            extracted_components.append("No info!")
+
+    return extracted_components
+
+
 def get_page_content(url: str):
     return requests.get(url).content
 
@@ -35,4 +50,11 @@ def get_nutrition_elements(soup: BeautifulSoup) -> list:
         ".cmp-nutrition-summary__heading-primary-item .value"
     )
     return extract_nutrition_elements(nutrition_elements)
+
+
+def get_components(soup: BeautifulSoup) -> list:
+    components = soup.select(
+        "div.cmp-nutrition-summary__details-column-view-desktop > ul > li"
+    )
+    return extract_components(components)
 

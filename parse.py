@@ -78,3 +78,11 @@ def get_single_product(detail_page_soup: BeautifulSoup):
         portion=portion,
     )
 
+
+def click_btn(driver, btn_id):
+    btn = WebDriverWait(driver, 5).until(
+        ec.element_to_be_clickable((By.ID, btn_id))
+    )
+    driver.execute_script("arguments[0].scrollIntoView(true);", btn)
+    btn.click()
+

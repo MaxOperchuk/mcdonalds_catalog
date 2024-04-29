@@ -11,3 +11,8 @@ def get_page_content(url: str):
 def get_page_soup(page: bytes | str) -> BeautifulSoup:
     soup = BeautifulSoup(page, "html.parser")
     return soup
+
+def get_name(soup: BeautifulSoup):
+    return soup.select_one(
+        "span.cmp-product-details-main__heading-title"
+    ).get_text(strip=True)

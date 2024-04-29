@@ -37,6 +37,24 @@ def get_page_soup(page: bytes | str) -> BeautifulSoup:
     soup = BeautifulSoup(page, "html.parser")
     return soup
 
+
+def get_detail_page_links(soup: BeautifulSoup):
+    link_blocks = soup.select("a.cmp-category__item-link")
+
+    detail_links = []
+
+    if link_blocks:
+        for link_block in link_blocks:
+            detail_part_of_link = link_block.get("href")
+            detail_links.append(
+                urljoin(BASE_URL, detail_part_of_link)
+            )
+    else:
+        print("Link not found.")
+
+    return detail_links
+
+
 def get_name(soup: BeautifulSoup):
     return soup.select_one(
         "span.cmp-product-details-main__heading-title"
@@ -86,3 +104,25 @@ def click_btn(driver, btn_id):
     driver.execute_script("arguments[0].scrollIntoView(true);", btn)
     btn.click()
 
+
+def get_all_products() -> None:
+    page_content = get_page_content(BASE_URL)
+    page_soup = get_page_soup(page_content)
+    detail_links = get_detail_page_links(page_soup)
+    products = []
+    with webdriver.Chrome() as driver:
+        for link in detail_links:
+            driver.get(url=link)
+            click_btn(
+                driver=driver,
+                btn_id="accordion-29309a7a60-item-9ea8a10642-button"
+            )
+
+            time.sleep(0.5)
+
+            detail_page_soup = get_page_soup(driver.page_source)
+            products.append(get_single_product(detail_page_soup))
+
+
+if __name__ == "__main__":
+    get_all_products()

@@ -1,8 +1,18 @@
+import time
+from urllib.parse import urljoin
+
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.wait import WebDriverWait
 
+from models import Product
+from services import remove_extra_spaces
 
 BASE_URL = "https://www.mcdonalds.com/ua/uk-ua/eat/fullmenu.html"
+
 
 def extract_nutrition_elements(elements: list) -> list:
     extracted_elements = []

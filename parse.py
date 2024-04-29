@@ -58,3 +58,23 @@ def get_components(soup: BeautifulSoup) -> list:
     )
     return extract_components(components)
 
+
+def get_single_product(detail_page_soup: BeautifulSoup):
+    name = get_name(detail_page_soup)
+    description = get_description(detail_page_soup)
+    calories, fats, carbs, proteins = get_nutrition_elements(detail_page_soup)
+    unsaturated_fats, sugar, salt, portion, *args = get_components(detail_page_soup)
+
+    return Product(
+        name=name,
+        description=description,
+        calories=calories,
+        fats=fats,
+        carbs=carbs,
+        proteins=proteins,
+        unsaturated_fats=unsaturated_fats,
+        sugar=sugar,
+        salt=salt,
+        portion=portion,
+    )
+

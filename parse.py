@@ -1,15 +1,24 @@
-import time
+from typing import List
 from urllib.parse import urljoin
 
-import requests
 from bs4 import BeautifulSoup
+from fastapi import HTTPException
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from models import Product
-from services import remove_extra_spaces
+from services import (
+    remove_extra_spaces,
+    nutrition_elements_formatter,
+    components_formatter,
+    additional_request_handler,
+    get_page_soup, click_btn, get_page_content,
+
+)
+from writer import write_to_json
+
 
 BASE_URL = "https://www.mcdonalds.com/ua/uk-ua/eat/fullmenu.html"
 SEARCH_PAGE_URL = "https://www.mcdonalds.com/ua/uk-ua/search.html"

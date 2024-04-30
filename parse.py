@@ -105,25 +105,30 @@ def get_components(soup: BeautifulSoup, link: str) -> list:
 
     return extract_components(ul_elements)
 
-def get_single_product(detail_page_soup: BeautifulSoup):
+
+def get_single_product(
+        detail_page_soup: BeautifulSoup,
+        link: str,
+) -> dict:
     name = get_name(detail_page_soup)
     description = get_description(detail_page_soup)
     calories, fats, carbs, proteins = get_nutrition_elements(detail_page_soup)
-    unsaturated_fats, sugar, salt, portion, *args = get_components(detail_page_soup)
-
-    return Product(
-        name=name,
-        description=description,
-        calories=calories,
-        fats=fats,
-        carbs=carbs,
-        proteins=proteins,
-        unsaturated_fats=unsaturated_fats,
-        sugar=sugar,
-        salt=salt,
-        portion=portion,
+    unsaturated_fats, sugar, salt, portion, *args = get_components(
+        detail_page_soup, link
     )
 
+    return {
+        "name": name,
+        "description": description,
+        "calories": calories,
+        "fats": fats,
+        "carbs": carbs,
+        "proteins": proteins,
+        "unsaturated_fats": unsaturated_fats,
+        "sugar": sugar,
+        "salt": salt,
+        "portion": portion,
+    }
 
 def click_btn(driver, btn_id):
     btn = WebDriverWait(driver, 5).until(

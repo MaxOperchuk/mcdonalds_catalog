@@ -130,12 +130,15 @@ def get_single_product(
         "portion": portion,
     }
 
-def click_btn(driver, btn_id):
-    btn = WebDriverWait(driver, 5).until(
-        ec.element_to_be_clickable((By.ID, btn_id))
+
+def get_details_about_product(driver: webdriver, link: str) -> dict:
+    driver.get(url=link)
+    click_btn(
+        driver=driver,
+        btn_id="accordion-29309a7a60-item-9ea8a10642-button"
     )
-    driver.execute_script("arguments[0].scrollIntoView(true);", btn)
-    btn.click()
+    detail_page_soup = get_page_soup(driver.page_source)
+    return get_single_product(detail_page_soup, link=link)
 
 
 def get_all_products() -> None:

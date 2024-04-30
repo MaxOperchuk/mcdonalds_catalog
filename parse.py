@@ -80,12 +80,20 @@ def get_nutrition_elements(soup: BeautifulSoup) -> list:
     return extract_nutrition_elements(nutrition_elements)
 
 
-def get_components(soup: BeautifulSoup) -> list:
-    components = soup.select(
-        "div.cmp-nutrition-summary__details-column-view-desktop > ul > li"
+def get_components(soup: BeautifulSoup, link: str) -> list:
+    ul_elements = soup.select(
+        ".cmp-nutrition-summary__details-column-view-mobile"
+        " > ul > .label-item"
     )
-    return extract_components(components)
 
+    if not ul_elements:
+        soup = additional_request_handler(link)
+        ul_elements = soup.select(
+            ".cmp-nutrition-summary__details-column-view-mobile"
+            " > ul > .label-item"
+        )
+
+    return extract_components(ul_elements)
 
 def get_single_product(detail_page_soup: BeautifulSoup):
     name = get_name(detail_page_soup)

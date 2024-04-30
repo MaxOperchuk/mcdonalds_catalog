@@ -12,6 +12,7 @@ from models import Product
 from services import remove_extra_spaces
 
 BASE_URL = "https://www.mcdonalds.com/ua/uk-ua/eat/fullmenu.html"
+SEARCH_PAGE_URL = "https://www.mcdonalds.com/ua/uk-ua/search.html"
 
 
 def extract_nutrition_elements(elements: list) -> list:

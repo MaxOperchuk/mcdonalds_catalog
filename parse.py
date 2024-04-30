@@ -29,7 +29,9 @@ def extract_nutrition_elements(elements: list) -> list:
 
     for element in elements:
         text = element.select_one("span.sr-only.sr-only-pd").text
-        extracted_elements.append(remove_extra_spaces(text))
+        text = remove_extra_spaces(text)
+        text = nutrition_elements_formatter(text)
+        extracted_elements.append(text)
 
     return extracted_elements
 

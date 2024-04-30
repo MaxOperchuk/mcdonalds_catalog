@@ -40,13 +40,11 @@ def extract_components(components: list) -> list:
     extracted_components = []
 
     for component in components:
-
-        if component:
-            extracted_components.append(
-                remove_extra_spaces(component.get_text(strip=True))
-            )
-        else:
-            extracted_components.append("No info!")
+        component = remove_extra_spaces(
+            component.get_text(strip=True)
+        )
+        component = components_formatter(component)
+        extracted_components.append(component)
 
     return extracted_components
 

@@ -21,9 +21,11 @@ PRODUCT_FIELDS = [
 app = FastAPI()
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+@app.get("/all_products/")
+def read_all_products() -> List[dict]:
+    all_products = get_all_products()
+    return all_products
+
 
 
 @app.get("/hello/{name}")

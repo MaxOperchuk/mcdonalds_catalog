@@ -1,3 +1,11 @@
+
+
+def additional_request_handler(link: str) -> BeautifulSoup:
+    with webdriver.Chrome() as driver:
+        driver.get(link)
+        return get_page_soup(driver.page_source)
+
+
 def remove_extra_spaces(text: str):
     return " ".join(text.split())
 

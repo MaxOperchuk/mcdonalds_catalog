@@ -126,10 +126,13 @@ def get_single_product(
 
 def get_details_about_product(driver: webdriver, link: str) -> dict:
     driver.get(url=link)
+
+    nutrient_content_btn_id = "accordion-29309a7a60-item-9ea8a10642-button"
     click_btn(
         driver=driver,
-        btn_id="accordion-29309a7a60-item-9ea8a10642-button"
+        btn_id=nutrient_content_btn_id
     )
+
     detail_page_soup = get_page_soup(driver.page_source)
     return get_single_product(detail_page_soup, link=link)
 
@@ -159,8 +162,8 @@ def get_product(product_name: str) -> dict:
         input_field = driver.find_element(value="form-text-1673594539")
         input_field.send_keys(product_name)
 
-        search_button_id = "button-93a5672f17"
-        click_btn(driver=driver, btn_id=search_button_id)
+        search_btn_id = "button-93a5672f17"
+        click_btn(driver=driver, btn_id=search_btn_id)
 
         try:
             div_element = WebDriverWait(driver, 2).until(

@@ -132,20 +132,22 @@ def get_details_about_product(driver: webdriver, link: str) -> dict:
     return get_single_product(detail_page_soup, link=link)
 
 
-def get_all_products() -> None:
+def get_all_products() -> List[dict]:
     page_content = get_page_content(BASE_URL)
     page_soup = get_page_soup(page_content)
     detail_links = get_detail_page_links(page_soup)
-    products = []
+    data = []
+
     with webdriver.Chrome() as driver:
         for link in detail_links:
-            driver.get(url=link)
-            click_btn(
-                driver=driver,
-                btn_id="accordion-29309a7a60-item-9ea8a10642-button"
+            product = get_details_about_product(
+                driver=driver, link=link
             )
+            data.append(product)
 
-            time.sleep(0.5)
+    write_to_json(data=data, filename="products.json")
+
+    return data
 
             detail_page_soup = get_page_soup(driver.page_source)
             products.append(get_single_product(detail_page_soup))

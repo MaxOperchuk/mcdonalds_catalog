@@ -49,16 +49,7 @@ def extract_components(components: list) -> list:
     return extracted_components
 
 
-def get_page_content(url: str):
-    return requests.get(url).content
-
-
-def get_page_soup(page: bytes | str) -> BeautifulSoup:
-    soup = BeautifulSoup(page, "html.parser")
-    return soup
-
-
-def get_detail_page_links(soup: BeautifulSoup):
+def get_detail_page_links(soup: BeautifulSoup) -> list:
     link_blocks = soup.select("a.cmp-category__item-link")
 
     detail_links = []

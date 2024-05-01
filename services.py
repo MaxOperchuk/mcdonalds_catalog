@@ -1,3 +1,5 @@
+import time
+
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -26,6 +28,7 @@ def get_page_soup(page: bytes | str) -> BeautifulSoup:
 def additional_request_handler(link: str) -> BeautifulSoup:
     with webdriver.Chrome() as driver:
         driver.get(link)
+        time.sleep(1)
         return get_page_soup(driver.page_source)
 
 

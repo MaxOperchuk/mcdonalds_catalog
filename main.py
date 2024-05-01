@@ -1,22 +1,10 @@
 from typing import List
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 
 from parse import get_all_products, get_product
+from validators import validate_search_parameter
 
-
-PRODUCT_FIELDS = [
-    "name",
-    "description",
-    "calories",
-    "fats",
-    "carbs",
-    "proteins",
-    "unsaturated_fats",
-    "sugar",
-    "salt",
-    "portion",
-]
 
 app = FastAPI()
 
@@ -38,13 +26,7 @@ def read_exact_field_of_product(
         product_name: str,
         product_field: str,
 ) -> str:
-    if product_field not in PRODUCT_FIELDS:
-        breakpoint()
-        raise HTTPException(
-            status_code=404,
-            detail=f"Field with such name '{product_field}' not found"
-        )
-
+    validate_search_parameter(product_field)
     product = get_product(product_name)
     product_field = product.get(product_field)
     return product_field

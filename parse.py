@@ -149,9 +149,34 @@ def get_all_products() -> List[dict]:
 
     return data
 
-            detail_page_soup = get_page_soup(driver.page_source)
-            products.append(get_single_product(detail_page_soup))
 
+def get_product(product_name: str) -> dict:
+    with webdriver.Chrome() as driver:
+        driver.get(SEARCH_PAGE_URL)
 
-if __name__ == "__main__":
-    get_all_products()
+        input_field = driver.find_element(value="form-text-1673594539")
+        input_field.send_keys(product_name)
+
+        search_button_id = "button-93a5672f17"
+        click_btn(driver=driver, btn_id=search_button_id)
+
+        try:
+            div_element = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, "div[data-key='0']")
+                )
+            )
+        except TimeoutException:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Product with such name '{product_name}' not found"
+            )
+
+        link = div_element.find_element(
+            By.TAG_NAME, "a"
+        ).get_attribute("href")
+
+        product = get_details_about_product(driver=driver, link=link)
+        write_to_json(data=[product], filename="product.json")
+
+        return product

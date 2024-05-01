@@ -168,22 +168,27 @@ def get_product(product_name: str) -> dict:
         click_btn(driver=driver, btn_id=search_btn_id)
 
         try:
-            div_element = WebDriverWait(driver, 2).until(
+
+            result_of_search = WebDriverWait(driver, 2).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, "div[data-key='0']")
                 )
             )
+
+            detail_page_link = result_of_search.find_element(
+                By.TAG_NAME, "a"
+            ).get_attribute("href")
+
+            product = get_details_about_product(
+                driver=driver, link=detail_page_link
+            )
+
         except TimeoutException:
             raise HTTPException(
                 status_code=404,
                 detail=f"Product with such name '{product_name}' not found"
             )
 
-        link = div_element.find_element(
-            By.TAG_NAME, "a"
-        ).get_attribute("href")
-
-        product = get_details_about_product(driver=driver, link=link)
         write_to_json(data=[product], filename="product.json")
 
         return product

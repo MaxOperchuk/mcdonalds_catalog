@@ -27,6 +27,11 @@ def read_all_products() -> List[dict]:
     return all_products
 
 
+@app.get("/products/{product_name}")
+def read_exact_product(product_name: str) -> dict:
+    product = get_product(product_name=product_name)
+    return product
+
 
 @app.get("/hello/{name}")
 async def say_hello(name: str):

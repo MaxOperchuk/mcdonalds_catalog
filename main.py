@@ -1,4 +1,22 @@
-from fastapi import FastAPI
+from typing import List
+
+from fastapi import FastAPI, HTTPException
+
+from parse import get_all_products, get_product
+
+
+PRODUCT_FIELDS = [
+    "name",
+    "description",
+    "calories",
+    "fats",
+    "carbs",
+    "proteins",
+    "unsaturated_fats",
+    "sugar",
+    "salt",
+    "portion",
+]
 
 app = FastAPI()
 

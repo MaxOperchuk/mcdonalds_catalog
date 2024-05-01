@@ -1,3 +1,4 @@
+import time
 from typing import List
 from urllib.parse import urljoin
 
@@ -84,19 +85,20 @@ def get_nutrition_elements(soup: BeautifulSoup) -> list:
 
 
 def get_components(soup: BeautifulSoup, link: str) -> list:
-    ul_elements = soup.select(
-        ".cmp-nutrition-summary__details-column-view-mobile"
-        " > ul > .label-item"
+    components_selector = (
+        ".cmp-nutrition-summary__details-column-view-mobile > ul > .label-item"
     )
+    li_elements = soup.select(components_selector)
 
-    if not ul_elements:
-        soup = additional_request_handler(link)
-        ul_elements = soup.select(
-            ".cmp-nutrition-summary__details-column-view-mobile"
-            " > ul > .label-item"
-        )
+    if not li_elements:
+        while True:
+            soup = additional_request_handler(link)
+            li_elements = soup.select(components_selector)
 
-    return extract_components(ul_elements)
+            if li_elements:
+                break
+
+    return extract_components(li_elements)
 
 
 def get_single_product(
@@ -132,7 +134,7 @@ def get_details_about_product(driver: webdriver, link: str) -> dict:
         driver=driver,
         btn_id=nutrient_content_btn_id
     )
-
+    time.sleep(1)
     detail_page_soup = get_page_soup(driver.page_source)
     return get_single_product(detail_page_soup, link=link)
 

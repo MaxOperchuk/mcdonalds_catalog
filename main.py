@@ -33,6 +33,18 @@ def read_exact_product(product_name: str) -> dict:
     return product
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+@app.get("/products/{product_name}/{product_field}")
+def read_exact_field_of_product(
+        product_name: str,
+        product_field: str,
+) -> str:
+    if product_field not in PRODUCT_FIELDS:
+        breakpoint()
+        raise HTTPException(
+            status_code=404,
+            detail=f"Field with such name '{product_field}' not found"
+        )
+
+    product = get_product(product_name)
+    product_field = product.get(product_field)
+    return product_field
